@@ -9,12 +9,6 @@ resource "cloudflare_zero_trust_tunnel_warp_connector" "connector" {
   tunnel_secret = base64encode(random_password.tunnel_secret.result)
 }
 
-# Retrieve tunnel token via data source (not exported by the resource)
-data "cloudflare_zero_trust_tunnel_warp_connector_token" "connector" {
-  account_id = var.account_id
-  tunnel_id  = cloudflare_zero_trust_tunnel_warp_connector.connector.id
-}
-
 # Teamnet route: send this site's CIDR into the tunnel.
 # The cloudflared_route resource is tunnel-type-agnostic at the teamnet API.
 resource "cloudflare_zero_trust_tunnel_cloudflared_route" "site_cidr" {
