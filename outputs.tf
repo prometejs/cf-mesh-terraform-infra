@@ -5,12 +5,12 @@
 output "site_inventory" {
   value = {
     for name, site in module.site : name => {
-      tunnel_id     = site.tunnel_id
-      tunnel_token  = site.tunnel_token
-      cidr          = site.site_cidr
-      connector_ip  = site.connector_ip
-      dns_record_id = site.dns_record_id
-      environment   = terraform.workspace
+      tunnel_id        = site.tunnel_id
+      tunnel_token     = site.tunnel_token
+      cidr             = site.site_cidr
+      connector_ip     = site.connector_ip
+      private_hostname = site.private_hostname
+      environment      = terraform.workspace
     }
   }
   sensitive   = true

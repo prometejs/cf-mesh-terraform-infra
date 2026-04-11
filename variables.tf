@@ -20,6 +20,16 @@ variable "aws_region" {
   description = "AWS region for S3 state backend"
 }
 
+variable "private_dns_suffix" {
+  type        = string
+  description = "Private DNS suffix for internal site hostnames (e.g. dev.prometejs.network)"
+}
+
+variable "user_email_domain" {
+  type        = string
+  description = "Email domain used to match users for the primary WARP device profile"
+}
+
 variable "sites" {
   type = map(object({
     cidr         = string

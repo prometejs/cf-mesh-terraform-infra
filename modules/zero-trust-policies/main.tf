@@ -30,7 +30,7 @@ resource "cloudflare_zero_trust_gateway_policy" "allow_warp_to_sites" {
   ])
 }
 
-# Device profile for WARP Connectors
+# Device profile for WARP Connectors (site-side pseudo-user)
 # v5: service_mode -> service_mode_v2, exclude is an attribute (list of objects)
 resource "cloudflare_zero_trust_device_custom_profile" "warp_connectors" {
   account_id    = var.account_id
@@ -41,6 +41,35 @@ resource "cloudflare_zero_trust_device_custom_profile" "warp_connectors" {
   enabled       = true
   auto_connect  = 0
   switch_locked = true
+
+  service_mode_v2 = {
+    mode = "warp"
+  }
+
+  exclude = [
+    {
+      address     = "100.96.0.0/12"
+      description = "Cloudflare CGNAT"
+    }
+  ]
+}
+
+# Primary user-facing device profile.
+# Matches users by email domain and forces DNS resolution through Cloudflare
+# Gateway so private hostnames (e.g. site-a.<suffix>) resolve via the internal
+# DNS hostname routes instead of the device's local resolver.
+resource "cloudflare_zero_trust_device_custom_profile" "primary_users" {
+  account_id  = var.account_id
+  name        = "${var.environment}-primary-users"
+  description = "Primary WARP+Gateway profile for ${var.environment} users"
+  match       = "identity.email matches \".*@${var.user_email_domain}$\""
+  precedence  = 10
+  enabled     = true
+
+  auto_connect          = 0
+  switch_locked         = true
+  allow_mode_switch     = false
+  disable_auto_fallback = true
 
   service_mode_v2 = {
     mode = "warp"

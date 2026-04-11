@@ -1,10 +1,10 @@
 output "tunnel_id" {
-  value       = cloudflare_zero_trust_tunnel_cloudflared.connector.id
-  description = "Cloudflare tunnel identifier"
+  value       = cloudflare_zero_trust_tunnel_warp_connector.connector.id
+  description = "Cloudflare WARP Connector tunnel identifier"
 }
 
 output "tunnel_token" {
-  value       = data.cloudflare_zero_trust_tunnel_cloudflared_token.connector.token
+  value       = data.cloudflare_zero_trust_tunnel_warp_connector_token.connector.token
   sensitive   = true
   description = "Token used to register the WARP Connector on the host"
 }
@@ -30,7 +30,7 @@ output "site_name" {
   description = "Site name identifier"
 }
 
-output "dns_record_id" {
-  value       = cloudflare_dns_record.site_connector.id
-  description = "DNS record ID for the site connector"
+output "private_hostname" {
+  value       = cloudflare_zero_trust_network_hostname_route.site_hostname.hostname
+  description = "Private FQDN for this site, resolvable only via WARP+Gateway"
 }

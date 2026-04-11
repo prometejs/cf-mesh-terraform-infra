@@ -1,3 +1,6 @@
+private_dns_suffix = "dev.prometejs.network"
+user_email_domain  = "prometejs.com"
+
 sites = {
   "dev-site-a" = {
     cidr         = "10.10.0.0/24"

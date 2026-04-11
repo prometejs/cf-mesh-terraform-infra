@@ -18,12 +18,12 @@ variable "account_id" {
   description = "Cloudflare account identifier"
 }
 
-variable "zone_id" {
-  type        = string
-  description = "Cloudflare DNS zone identifier"
-}
-
 variable "environment" {
   type        = string
   description = "Environment name (dev, test, prod)"
+}
+
+variable "private_dns_suffix" {
+  type        = string
+  description = "Private DNS suffix for the site hostname (e.g. dev.prometejs.network). Resolvable only over WARP+Gateway."
 }

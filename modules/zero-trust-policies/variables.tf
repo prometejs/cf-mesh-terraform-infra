@@ -29,3 +29,8 @@ variable "allowed_email_domains" {
   default     = []
   description = "Email domains allowed access via Zero Trust policies"
 }
+
+variable "user_email_domain" {
+  type        = string
+  description = "Email domain suffix used to match users for the primary device profile (e.g. prometejs.com)"
+}
