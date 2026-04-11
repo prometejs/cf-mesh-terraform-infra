@@ -21,7 +21,7 @@ new_sites=$(terraform show -json "$plan_file" | jq -r '
   [
     .resource_changes[]
     | select(
-        .type == "cloudflare_zero_trust_tunnel_cloudflared"
+        .type == "cloudflare_zero_trust_tunnel_warp_connector"
         and (.address | startswith("module.site["))
         and (.change.actions | contains(["create"]))
       )
