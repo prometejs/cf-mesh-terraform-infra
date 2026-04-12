@@ -19,6 +19,4 @@ terraform {
   backend "s3" {}
 }
 
-provider "cloudflare" {
-  api_token = var.cloudflare_api_token
-}
+provider "cloudflare" {}
