@@ -64,7 +64,7 @@ jobs:
 
       - name: Init
         id: init
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config=environment/${{ env.WORKSPACE }}.s3.tfbackend
 
       - name: Validate
         id: validate

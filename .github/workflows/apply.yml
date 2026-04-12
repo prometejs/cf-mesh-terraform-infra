@@ -61,7 +61,7 @@ jobs:
           name: ${{ env.PLAN_FILE }}
 
       - name: Init
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config=environment/${{ env.WORKSPACE }}.s3.tfbackend
 
       - name: Select workspace
         run: terraform workspace select -or-create=true "$WORKSPACE"
