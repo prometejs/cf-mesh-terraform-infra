@@ -37,6 +37,7 @@ module "zero_trust_policies" {
 # --------------------------------------------------------------------------
 # These resources define the Ansible dynamic inventory directly in TF state.
 # The cloud.terraform.terraform_provider inventory plugin reads them.
+#...
 
 resource "ansible_group" "connectors" {
   name = "connectors"
