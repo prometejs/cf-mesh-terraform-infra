@@ -35,6 +35,7 @@ env:
   TF_VAR_cloudflare_account_id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
   TF_VAR_cloudflare_zone_id: ${{ vars.CLOUDFLARE_ZONE_ID }}
   WORKSPACE: ${{ inputs.workspace || 'dev' }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   plan:
@@ -46,56 +47,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Checkov
-        uses: bridgecrewio/checkov-action@v12
-        with:
-          framework: terraform
-          soft_fail: false
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-
-      - name: Format check
-        id: fmt
-        run: terraform fmt -recursive -check
-        continue-on-error: true
-
-      - name: Init
-        id: init
-        run: terraform init -input=false -backend-config=environments/${{ env.WORKSPACE }}.s3.tfbackend
-
-      - name: Validate
-        id: validate
-        run: terraform validate -no-color
-
-      - name: Select workspace
-        run: terraform workspace select -or-create=true "$WORKSPACE"
-
-      - name: Terraform Plan Comment
-        if: github.event_name == 'pull_request'
+      - name: Terraform Plan
         uses: dflook/terraform-plan@v2
+        id: plan
         with:
           path: .
           label: tf-plan-${{ env.WORKSPACE }}
           workspace: ${{ env.WORKSPACE }}
           var_file: environments/${{ env.WORKSPACE }}.tfvars
-
-      - name: Plan (binary, for apply)
-        if: github.event_name != 'pull_request'
-        run: |
-          terraform plan \
-            -out="$PLAN_FILE" \
-            -input=false \
-            -var-file="environments/${WORKSPACE}.tfvars"
+          backend_config_file: environments/${{ env.WORKSPACE }}.s3.tfbackend
+          add_github_comment: "${{ github.event_name == 'pull_request' }}"
 
       - name: Upload plan artifact
-        if: github.event_name != 'pull_request'
+        if: github.event_name == 'workflow_call'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PLAN_FILE }}
-          path: ${{ env.PLAN_FILE }}
+          path: ${{steps.plan.outputs.plan_path }}
           if-no-files-found: error
           retention-days: 1
           overwrite: true
