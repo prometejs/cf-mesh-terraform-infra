@@ -42,7 +42,7 @@ variable "sites" {
 
   validation {
     condition = alltrue([
-      for s in values(var.sites) : !cidrsubnet(s.cidr, 0, 0) == cidrsubnet("100.96.0.0/12", 0, 0)
+      for s in values(var.sites) : cidrsubnet(s.cidr, 0, 0) != cidrsubnet("100.96.0.0/12", 0, 0)
     ])
     error_message = "Site CIDRs must not overlap with Cloudflare CGNAT range 100.96.0.0/12."
   }
