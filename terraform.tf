@@ -17,11 +17,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "tf-prometejs-state-bucket"
-    key            = "cloudflare-infra/terraform.tfstate"
-    dynamodb_table = "tf-prometejs-state-lock"
-    region         = "eu-central-1"
-    encrypt        = true
+    bucket       = var.aws_s3_bucket
+    key          = var.aws_s3_bucket_key
+    use_lockfile = var.aws_s3_enable_lockfile
+    region       = var.aws_region
+    encrypt      = var.aws_s3_bucket_data_encrypt
   }
 }
 

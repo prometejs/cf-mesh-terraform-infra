@@ -16,8 +16,32 @@ variable "cloudflare_zone_id" {
 
 variable "aws_region" {
   type        = string
-  default     = "eu-central-1"
+  default     = "eu-west-2"
   description = "AWS region for S3 state backend"
+}
+
+variable "aws_s3_bucket" {
+  type        = string
+  default     = "tf-prometejs-state-bucket"
+  description = "S3 bucket name for Terraform state storage"
+}
+
+variable "aws_s3_bucket_key" {
+  type        = string
+  default     = "cloudflare-infra/terraform.tfstate"
+  description = "S3 bucket key for Terraform state storage"
+}
+
+variable "aws_s3_enable_lockfile" {
+  type        = bool
+  default     = true
+  description = "Flag to enable S3 backend state locking using DynamoDB"
+}
+
+variable "aws_s3_bucket_data_encrypt" {
+  type        = bool
+  default     = true
+  description = "flag to toggle bucket data encryption"
 }
 
 variable "private_dns_suffix" {
