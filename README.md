@@ -31,11 +31,11 @@ graph LR
     C --- A
 
     %% Clickable hyperlinks (Fixed with 'href')
-    click T href "https://github.com/prometejs/terraform-cloudflare-infra" "Open Terraform Repo"
-    click A href "https://github.com/prometejs/core-infra" "Open Cloud-Init Repo"
+    click C href "https://github.com/prometejs/cf-cloud-init" "Open Cloud-Init Repo"
+    click A href "https://github.com/prometejs/core-infra" "Open Ansible Repo"
 ```
 
-## Network topology
+#### Network topology
 
 ```mermaid
 flowchart TB
@@ -123,7 +123,7 @@ terraform workspace select -or-create=true dev
 terraform plan -var-file=environments/dev.tfvars
 ```
 
-### Deployment flow
+### Deployment
 
 ```mermaid
 flowchart LR
