@@ -88,7 +88,7 @@ Geared towards a site-to-site mesh for which we need subnet-level advertisement,
 Two canonical flows matter: **site → site** and **DNS resolution**. 
 
 ### DNS resolution
-<div style="width: 50%;">
+
 ```mermaid
 sequenceDiagram
     participant C as Client<br/>(WARP-enrolled)
@@ -102,9 +102,8 @@ sequenceDiagram
     G-->>W: answer (CGNAT IP bound to tunnel)
     W-->>C: DNS response
 ```
-</div>
 
-Key point: the answer IP is a Cloudflare-managed CGNAT address. It has no meaning outside the WARP tunnel. A non-WARP device asking a public resolver for the same name gets `NXDOMAIN`.
+**NB**: the answer IP is a Cloudflare-managed CGNAT address. It has no meaning outside the WARP tunnel. A non-WARP device asking a public resolver for the same name gets `NXDOMAIN`.
 
 ### Site → site 
 
