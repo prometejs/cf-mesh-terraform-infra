@@ -89,7 +89,7 @@ Two canonical flows matter: **site → site** and **DNS resolution**.
 
 ### DNS resolution
 
-<div style="width: 50%;">
+<div style="width: 50%; height: 50%;">
 
 ```mermaid
 sequenceDiagram
@@ -110,7 +110,7 @@ sequenceDiagram
 **NB**: the answer IP is a Cloudflare-managed CGNAT address. It has no meaning outside the WARP tunnel. A non-WARP device asking a public resolver for the same name gets `NXDOMAIN`.
 
 ### Site → site 
-<div style="width: 50%;">
+<div style="width: 50%; height: 50%;">
 
 ```mermaid
 sequenceDiagram
