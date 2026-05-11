@@ -15,6 +15,7 @@ output "site_inventory" {
   }
   sensitive   = true
   description = "Structured site inventory for Ansible consumption"
+  # ( SSH target, `ha_enabled`, `ha_peer_ip`, `remote_cidrs` can be added here as needed )
 }
 
 output "site_names" {
