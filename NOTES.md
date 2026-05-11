@@ -89,6 +89,8 @@ Two canonical flows matter: **site → site** and **DNS resolution**.
 
 ### DNS resolution
 
+<div style="width: 50%;">
+
 ```mermaid
 sequenceDiagram
     participant C as Client<br/>(WARP-enrolled)
@@ -103,9 +105,12 @@ sequenceDiagram
     W-->>C: DNS response
 ```
 
+</div>
+
 **NB**: the answer IP is a Cloudflare-managed CGNAT address. It has no meaning outside the WARP tunnel. A non-WARP device asking a public resolver for the same name gets `NXDOMAIN`.
 
 ### Site → site 
+<div style="width: 50%;">
 
 ```mermaid
 sequenceDiagram
@@ -122,6 +127,8 @@ sequenceDiagram
     GW->>TB: forward into site B tunnel
     TB->>HB: forward onto site B LAN
 ```
+
+</div>
 
 ## Caveats
 
