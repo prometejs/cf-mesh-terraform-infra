@@ -73,6 +73,16 @@ flowchart TB
     GW --- TRR
     TRR -.-> CA
     TRR -.-> CB
+
+    classDef cfStyle fill:transparent,stroke:#f38020,stroke-width:2px,color:#1a1a1a
+    classDef siteAStyle fill:transparent,stroke:#0284c7,stroke-width:2px,color:#1a1a1a
+    classDef siteBStyle fill:transparent,stroke:#0d9488,stroke-width:2px,color:#1a1a1a
+    classDef usersStyle fill:transparent,stroke:#be185d,stroke-width:2px,color:#1a1a1a
+
+    class CF cfStyle
+    class SA siteAStyle
+    class SB siteBStyle
+    class USERS usersStyle
 ```
 
 ## Setup Requirements
