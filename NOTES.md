@@ -85,7 +85,7 @@ Geared towards a site-to-site mesh for which we need subnet-level advertisement,
 
 ## Request flow
 
-Two canonical flows matter: **site → site** and **user → site**. They share the same DNS resolution path; they differ in who originates the query.
+Two canonical flows matter: **site → site** and **DNS resolution**. 
 
 ### DNS resolution
 
@@ -121,25 +121,6 @@ sequenceDiagram
     GW->>GW: match allow_inter_site_traffic
     GW->>TB: forward into site B tunnel
     TB->>HB: forward onto site B LAN
-```
-
-### User → site
-
-```mermaid
-sequenceDiagram
-    participant U as User laptop<br/>(WARP + primary_users profile)
-    participant CFE as Cloudflare edge
-    participant GW as Gateway network policy
-    participant TA as Site A WARP Connector
-    participant SA as Site A service<br/>(in 10.30.0.0/24)
-    U->>CFE: TCP SYN to CGNAT IP for site-a
-    CFE->>GW: packet inspected
-    GW->>GW: match allow_warp_to_sites<br/>(net.dst.ip in {10.30.0.0/24})
-    GW->>TA: forward into tunnel
-    TA->>SA: forward onto site LAN
-    SA-->>TA: reply
-    TA-->>CFE: reply via tunnel
-    CFE-->>U: reply via WARP
 ```
 
 ## Caveats
