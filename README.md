@@ -6,6 +6,88 @@ network; sites reach each other via private DNS names resolved through
 Cloudflare Gateway. Host-side provisioning of the connectors is handled by
 Ansible, which sources its inventory directly from the Terraform state file.
 
+## Part of a larger stack
+
+This repo provisions the **Cloudflare side** of the mesh only. A new site is
+brought online by three repos working in order:
+
+| Repo | Role |
+|---|---|
+| [`cf-cloud-init`](../cf-cloud-init) | NoCloud cloud-init that installs the WARP Connector binary on a fresh Ubuntu host and provisions the `ansible` automation user |
+| `terraform-cloudflare-infra` (this repo) | Cloudflare resources (tunnels, teamnet routes, private DNS, Gateway policies) + Terraform-state-backed Ansible inventory |
+| [`ansible-cloudflare-infra`](../ansible-cloudflare-infra) | Playbooks that read this repo's state via `cloud.terraform.terraform_provider` and register each site's connector against its tunnel token |
+
+Order of operations for a new site:
+`cf-cloud-init` → `terraform-cloudflare-infra` → `ansible-cloudflare-infra`.
+
+## Target network
+
+The mesh provisioned here is designed for distributed ASIC-mining sites that
+report into a central control-plane site. Every site is a flat L2 subnet with
+one host (the **Control Node**) running the WARP Connector — that host is the
+only thing this repo cares about per site; the rest of the LAN is opaque to
+Cloudflare.
+
+```mermaid
+flowchart TB
+    subgraph CF["Cloudflare Zero Trust edge"]
+        EDGE["Tunnel registry · Gateway · Hostname routes"]
+    end
+
+    subgraph SB["Site B — ASIC mining"]
+        direction TB
+        RB["Router<br/>(outbound only)"]
+        FWB["Firewall"]
+        CNB["Control Node<br/>WARP Connector"]
+        SWB["Switch"]
+        MB1["ASIC Miner [1]"]
+        MB2["ASIC Miner [2]"]
+        MBN["ASIC Miner [N]"]
+        RB --> FWB --> CNB --> SWB
+        SWB --> MB1
+        SWB --> MB2
+        SWB --> MBN
+    end
+
+    subgraph S0["Site 0 — control plane"]
+        direction TB
+        R0["Router<br/>(outbound only)"]
+        FW0["Firewall"]
+        SW0["Switch (optional)"]
+        STK["Server Stack<br/>(one host runs WARP Connector)"]
+        R0 --> FW0 --> SW0 --> STK
+    end
+
+    subgraph SA["Site A — ASIC mining"]
+        direction TB
+        RA["Router<br/>(outbound only)"]
+        FWA["Firewall"]
+        CNA["Control Node<br/>WARP Connector"]
+        SWA["Switch"]
+        MA1["ASIC Miner [1]"]
+        MA2["ASIC Miner [2]"]
+        MAN["ASIC Miner [N]"]
+        RA --> FWA --> CNA --> SWA
+        SWA --> MA1
+        SWA --> MA2
+        SWA --> MAN
+    end
+
+    CNB -.WARP tunnel.-> EDGE
+    STK -.WARP tunnel.-> EDGE
+    CNA -.WARP tunnel.-> EDGE
+```
+
+- Each site's CIDR is what this repo advertises as a teamnet route; the ASIC
+  miners and Server Stack hosts sit inside that CIDR and are reachable
+  transparently once the tunnel is up.
+- Site 0 has no special hub role — to Cloudflare it's just another connector
+  site. The mesh is flat; any site can reach any other site by its private
+  hostname.
+- The Control Node (or the designated Server Stack host on Site 0) is what
+  `ansible-cloudflare-infra` targets, using the inventory it reads from this
+  repo's Terraform state.
+
 ## What this repo does
 
 - Provisions one `cloudflare_zero_trust_tunnel_warp_connector` per site
