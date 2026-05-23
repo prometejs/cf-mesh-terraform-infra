@@ -86,16 +86,15 @@ sites = {
 
 # Additional teamnet routes published through an existing site's mesh node
 # tunnel. The site's primary CIDR is already advertised by the site-connector
-# module - only put *extra* CIDRs here.
-routes = [
-  {
-    site    = "dev-site-a"
-    tunnel_id = "123e4567-e89b-12d3-a456-426614174011"
-    comment = "Secondary VLAN behind dev-site-a"
-  },
-  {
-    site    = "dev-site-edge-lon"
-    tunnel_id = "123e4567-e89b-12d3-a456-426614174000"
-    comment = "IoT subnet reachable via the London edge mesh node"
-  },
-]
+# routes = [
+#   {
+#     site    = "dev-site-a"
+#     tunnel_id = "123e4567-e89b-12d3-a456-426614174011"
+#     comment = "Secondary VLAN behind dev-site-a"
+#   },
+#   {
+#     site    = "dev-site-edge-lon"
+#     tunnel_id = "123e4567-e89b-12d3-a456-426614174000"
+#     comment = "IoT subnet reachable via the London edge mesh node"
+#   },
+# ]
