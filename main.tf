@@ -6,12 +6,12 @@ module "nodes" {
   source   = "./modules/site-connector"
   for_each = var.sites
 
-  name          = each.key
-  cidr          = each.value.cidr
-  connector_ip  = each.value.connector_ip
-  account_id    = var.cloudflare_account_id
-  environment   = terraform.workspace
-  dns_suffix    = var.private_dns_suffix
+  name         = each.key
+  cidr         = each.value.cidr
+  connector_ip = each.value.connector_ip
+  account_id   = var.cloudflare_account_id
+  environment  = terraform.workspace
+  dns_suffix   = var.private_dns_suffix
 }
 
 # --------------------------------------------------------------------------
@@ -21,9 +21,9 @@ module "nodes" {
 module "zero_trust_policies" {
   source = "./modules/zero-trust-policies"
 
-  account_id        = var.cloudflare_account_id
-  environment       = terraform.workspace
-  site_peers        = local.site_peers
+  account_id  = var.cloudflare_account_id
+  environment = terraform.workspace
+  site_peers  = local.site_peers
 }
 
 # --------------------------------------------------------------------------
@@ -35,7 +35,7 @@ module "routes" {
 
   account_id  = var.cloudflare_account_id
   environment = terraform.workspace
-  routes = var.routes
+  routes      = var.routes
 }
 
 # --------------------------------------------------------------------------
