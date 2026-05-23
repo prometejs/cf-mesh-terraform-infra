@@ -62,7 +62,7 @@ see [notes](./NOTES.md) for more info.
 
 | Name | Sensitive | Used for |
 |:---|:---|:---|
-| `CLOUDFLARE_API_TOKEN` | true | cloudflare provider token. Token must allow Zero Trust (gateway policies,  device profiles, virtual networks, tunnel routes), Cloudflare One Connectors and Cloudflare One Connector: WARP. |
+| `CLOUDFLARE_API_TOKEN` | true | cloudflare provider token. Token must allow Zero Trust (gateway policies,  device profiles, virtual networks, tunnel routes), Cloudflare One Networks, Cloudflare One Connectors and Cloudflare One Connector: WARP. |
 | `AWS_ACCESS_KEY_ID` | true  | Auth for the S3 backend |
 | `AWS_SECRET_ACCESS_KEY` | true | Auth for the S3 backend |
 | `CLOUDFLARE_ACCOUNT_ID` | false | Becomes TF_VAR_cloudflare_account_id |

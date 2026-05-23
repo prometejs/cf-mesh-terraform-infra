@@ -86,15 +86,24 @@ sites = {
 
 # Additional teamnet routes published through an existing site's mesh node
 # tunnel. The site's primary CIDR is already advertised by the site-connector
-routes = [
-  {
-    tunnel_id = "123e4567-e89b-12d3-a456-426614174011"
-    network   = "10.30.20.0/24"
-    comment   = "Secondary VLAN behind dev-site-a"
-  },
-  {
-    tunnel_id = "123e4567-e89b-12d3-a456-426614174000"
-    network   = "10.40.0.0/22"
-    comment   = "IoT subnet reachable via the London edge mesh node (dev-site-edge-lon)"
-  },
-]
+# module — only put *extra* CIDRs here.
+#
+# `tunnel_id` must be a REAL tunnel UUID from this account. After the first
+# successful apply, look up the IDs in the Cloudflare dashboard (Zero Trust →
+# Networks → Tunnels) or via `terraform output tunnel_ids`, then paste them
+# in below and re-apply. Empty by default so the initial apply succeeds.
+routes = []
+
+# Example shape once you have real tunnel IDs:
+# routes = [
+#   {
+#     tunnel_id = "<uuid-of-dev-site-a-tunnel>"
+#     network   = "10.30.20.0/24"
+#     comment   = "Secondary VLAN behind dev-site-a"
+#   },
+#   {
+#     tunnel_id = "<uuid-of-dev-site-edge-lon-tunnel>"
+#     network   = "10.40.0.0/22"
+#     comment   = "IoT subnet reachable via dev-site-edge-lon"
+#   },
+# ]
