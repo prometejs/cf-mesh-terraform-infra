@@ -3,17 +3,6 @@ variable "cloudflare_account_id" {
   description = "Cloudflare account identifier"
 }
 
-variable "cloudflare_zone_id" {
-  type        = string
-  description = "Cloudflare DNS zone identifier"
-}
-
-variable "aws_region" {
-  type        = string
-  default     = "eu-west-2"
-  description = "AWS region for S3 state backend"
-}
-
 variable "private_dns_suffix" {
   type        = string
   description = "Private DNS suffix for internal site hostnames (e.g. dev.prometejs.network)"
