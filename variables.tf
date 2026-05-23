@@ -3,11 +3,6 @@ variable "cloudflare_account_id" {
   description = "Cloudflare account identifier"
 }
 
-variable "private_dns_suffix" {
-  type        = string
-  description = "Private DNS suffix for internal site hostnames (e.g. dev.prometejs.network)"
-}
-
 variable "sites" {
   type = map(object({
     cidr         = string

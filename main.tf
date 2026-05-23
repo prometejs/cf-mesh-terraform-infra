@@ -22,7 +22,6 @@ module "nodes" {
   connector_ip       = each.value.connector_ip
   account_id         = var.cloudflare_account_id
   environment        = terraform.workspace
-  dns_suffix         = var.private_dns_suffix
   virtual_network_id = module.vnet.id
 }
 
@@ -71,12 +70,12 @@ resource "ansible_host" "site" {
   groups = [ansible_group.connectors.name]
 
   variables = {
-    ansible_host     = each.value.connector_ip
-    tunnel_token     = module.nodes[each.key].tunnel_token
-    site_cidr        = each.value.cidr
-    ha_enabled       = tostring(each.value.ha_enabled)
-    ha_peer_ip       = each.value.ha_peer_ip
-    environment      = terraform.workspace
+    ansible_host = each.value.connector_ip
+    tunnel_token = module.nodes[each.key].tunnel_token
+    site_cidr    = each.value.cidr
+    ha_enabled   = tostring(each.value.ha_enabled)
+    ha_peer_ip   = each.value.ha_peer_ip
+    environment  = terraform.workspace
     remote_cidrs = jsonencode([
       for k, v in var.sites : v.cidr if k != each.key
     ])
