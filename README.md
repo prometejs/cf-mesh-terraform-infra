@@ -15,7 +15,7 @@ graph LR
     T["cf-mesh-terraform-infra<br/><hr/>creates mesh node tunnels + tf-states"]:::activeLinkNodeClass
     C["cf-mesh-cloud-init<br/><hr/>first-boot provisioning"]:::linkNode
     A["cf-mesh-site-config<br/><hr/>day-2 config"]:::linkNode
-    N["cf-mesh-node-agent<br/><hr/>day-2 config"]:::linkNode
+    N["cf-mesh-node-agent<br/><hr/>metrics+logs collector"]:::linkNode
 
     %% Flow connections with text notes
     T --> C
