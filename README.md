@@ -57,60 +57,26 @@ see [notes](./NOTES.md) for more info.
 
 Create `dev` and `prod` environments in repo Settings → Environments, then set the following at the **environment** level:
 
-| Secrets | Variables |
+| Variable | Terraform Side |
 |---|---|
-| `CLOUDFLARE_API_TOKEN` | `CLOUDFLARE_ACCOUNT_ID` → `TF_VAR_cloudflare_account_id` |
-| `AWS_ACCESS_KEY_ID` | `CLOUDFLARE_ZONE_ID` → `TF_VAR_cloudflare_zone_id` |
+| `CLOUDFLARE_API_TOKEN` | `CLOUDFLARE_API_TOKEN` → `TF_VAR_cloudflare_api_token` |
+| `CLOUDFLARE_ACCOUNT_ID` | `CLOUDFLARE_ACCOUNT_ID` → `TF_VAR_cloudflare_account_id` |
+| `CLOUDFLARE_ZONE_ID` | `CLOUDFLARE_ZONE_ID` → `TF_VAR_cloudflare_zone_id` |
+| `AWS_ACCESS_KEY_ID` | |
 | `AWS_SECRET_ACCESS_KEY` | |
 
-#### Network topology
+### Usage Example
+Local plan (read-only, dev)
+```
+export CLOUDFLARE_API_TOKEN=...
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+export TF_VAR_cloudflare_account_id=...
+export TF_VAR_cloudflare_zone_id=...
 
-```mermaid
-flowchart TB
-    subgraph CF[Cloudflare Zero Trust]
-        GW[Gateway<br/>network policies<br/>DNS resolver]
-        TREG[Mesh node registry]
-        HRR[Hostname routes<br/>a.dev.prometejs.network<br/>b.dev.prometejs.network]
-        TRR[Teamnet routes<br/>10.30.0.0/24 → mesh-a<br/>10.30.1.0/24 → mesh-b]
-        PROF[Device profiles<br/>primary_users<br/>mesh_nodes]
-    end
-
-    subgraph SA[Site A - 10.30.0.0/24]
-        CA[Cloudflare Mesh Node A<br/>10.30.0.1]
-        HOSTA[Host services]
-        CA --- HOSTA
-    end
-
-    subgraph SB[Site B - 10.30.1.0/24]
-        CB[Cloudflare Mesh Node B<br/>10.30.1.1]
-        HOSTB[Host services]
-        CB --- HOSTB
-    end
-
-    subgraph USERS[WARP users]
-        U1[Laptop 1]
-        U2[Laptop 2]
-    end
-
-    CA -.outbound tunnel.-> TREG
-    CB -.outbound tunnel.-> TREG
-    U1 -.WARP.-> GW
-    U2 -.WARP.-> GW
-    GW --- PROF
-    GW --- HRR
-    GW --- TRR
-    TRR -.-> CA
-    TRR -.-> CB
-
-    classDef cfStyle fill:transparent,stroke:#f38020,stroke-width:1px,color:#f38020
-    classDef siteAStyle fill:transparent,stroke:#0284c7,stroke-width:1px,color:#0284c7
-    classDef siteBStyle fill:transparent,stroke:#0d9488,stroke-width:1px,color:#0d9488
-    classDef usersStyle fill:transparent,stroke:#be185d,stroke-width:1px,color:#be185d
-
-    class CF cfStyle
-    class SA siteAStyle
-    class SB siteBStyle
-    class USERS usersStyle
+terraform init
+terraform workspace select -or-create=true dev
+terraform plan -var-file=environments/dev.tfvars
 ```
 
 ### Testing
@@ -120,4 +86,3 @@ see [fixtures](./fixtures/dev.tfvars) for sample data
 ## License
 
 MIT — see [LICENSE.md](./LICENSE.md).
-
