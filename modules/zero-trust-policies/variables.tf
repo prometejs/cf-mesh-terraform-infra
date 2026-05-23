@@ -8,7 +8,7 @@ variable "environment" {
   description = "Environment name (dev, test, prod)"
 }
 
-variable "site_peers" { 
+variable "site_peers" {
   type        = map(list(string))
   description = "Map of destination CIDR to their allowed CIDR blocks."
 }
