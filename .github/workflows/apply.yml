@@ -70,11 +70,8 @@ jobs:
       - name: Select workspace
         run: terraform workspace select -or-create=true "$WORKSPACE"
 
-      - name: Verify artifact contents
-        run: ls ${{ steps.download_plan.outputs.download-path }}
-
       - name: Apply
-        run: terraform apply -auto-approve -input=false "$PLAN_FILE"
+        run: terraform apply -auto-approve -input=false plan.tfplan
 
   summary:
     name: Job Summary
