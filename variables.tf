@@ -42,9 +42,9 @@ variable "sites" {
 
 variable "routes" {
   type = list(object({
-    site    = string
-    network = string
-    comment = optional(string, "")
+    tunnel_id = string
+    network   = string
+    comment   = optional(string, "")
   }))
   default     = []
   description = "Additional teamnet routes to advertise through an existing site's mesh node tunnel"
