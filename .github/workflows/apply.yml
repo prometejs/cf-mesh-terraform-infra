@@ -36,6 +36,7 @@ jobs:
     uses: ./.github/workflows/plan.yml
     with:
       workspace: ${{ inputs.workspace }}
+      upload_artifact: true
     secrets: inherit
 
   apply:
