@@ -13,16 +13,20 @@ graph LR
 
     %% Diagram nodes
     T["cf-mesh-terraform-infra<br/><hr/>creates mesh node tunnels + tf-states"]:::activeLinkNodeClass
-    C["cf-cloud-init<br/><hr/>first-boot provisioning"]:::linkNode
-    A["ansible-cloudflare-infra<br/><hr/>day-2 config"]:::linkNode
+    C["cf-mesh-cloud-init<br/><hr/>first-boot provisioning"]:::linkNode
+    A["cf-mesh-site-config<br/><hr/>day-2 config"]:::linkNode
+    N["cf-mesh-node-agent<br/><hr/>day-2 config"]:::linkNode
 
     %% Flow connections with text notes
     T --> C
-    C --- A
+    T --> A
+    C --> A
+    N --> C
 
     %% Clickable hyperlinks (Fixed with 'href')
     click C href "https://github.com/prometejs/cf-mesh-cloud-init" "Open Cloud-Init Repo"
     click A href "https://github.com/prometejs/cf-mesh-site-config" "Open Ansible Repo"
+    click N href "https://github.com/prometejs/cf-mesh-node-agent" "Node Agent Repo"
 ```
 
 #### Features
