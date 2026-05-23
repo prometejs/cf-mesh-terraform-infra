@@ -84,16 +84,8 @@ sites = {
   }
 }
 
-# Additional teamnet routes published through an existing site's mesh node
-# tunnel. The site's primary CIDR is already advertised by the site-connector
-# module — only put *extra* CIDRs here.
-#
-# `tunnel_id` must be a REAL tunnel UUID from this account. After the first
-# successful apply, look up the IDs in the Cloudflare dashboard (Zero Trust →
-# Networks → Tunnels) or via `terraform output tunnel_ids`, then paste them
-# in below and re-apply. Empty by default so the initial apply succeeds.
+# Additional teamnet routes published through an existing site's mesh node tunnel. tunnel_id` must be a REAL tunnel UUID from this account. 
 routes = []
-
 # Example shape once you have real tunnel IDs:
 # routes = [
 #   {
