@@ -77,4 +77,4 @@ see [fixtures](./fixtures/dev.tfvars) for sample data
 
 ## License
 
-MIT — see [LICENSE.md](./LICENSE.md).
+MIT - see [LICENSE.md](./LICENSE.md).
