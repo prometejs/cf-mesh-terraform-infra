@@ -20,7 +20,7 @@ Four things make the mesh work:
 ### Virtual Network (per workspace)
 
 - **What:** A `cloudflare_zero_trust_tunnel_cloudflared_virtual_network` resource created once per Terraform workspace by `modules/virtual-network`.
-- **Does:** Provides a logical routing namespace inside the Zero Trust account. Every teamnet route and every private DNS hostname route in this workspace is pinned to its VNet via `virtual_network_id`.
+- **Does:** Provides a logical routing namespace inside the Zero Trust account. Every teamnet route in this workspace is pinned to its VNet via `virtual_network_id`.
 - **Why:** Two VNets on the same account may advertise overlapping CIDRs without conflict; so `dev` and `prod` can use the same `10.20.0.0/24` blocks without colliding. It also makes per-environment cleanup trivial: deleting a workspace tears down its VNet and orphans nothing into the account default.
 
 ### Cloudflare Mesh node (per site)
@@ -34,12 +34,6 @@ Four things make the mesh work:
 - **What:** Entries in Cloudflare's internal routing table that map a CIDR to a tunnel UUID, scoped to a Virtual Network.
 - **Does:** Tell Cloudflare Gateway, "packets destined for `10.10.0.0/24` inside VNet `<vnet-id>` should be sent into tunnel `<uuid>`."
 - **Why:** Without these, Cloudflare knows the tunnel exists but has no idea which subnet lives behind it. Scoping to a VNet means dev and prod can advertise the same CIDR through different tunnels without collision.
-
-### Private DNS (hostname routes)
-
-- **What:** cloudflare_zero_trust_network_hostname_route resources bind a private FQDN to a specific tunnel.
-- **Does:** Cloudflare Gateway DNS resolves these hostnames exclusively for WARP clients, routing traffic through the tunnel without exposing names to public DNS.
-- **Why:** Replaces insecure public DNS records with a native, private internal DNS mechanism that eliminates public leaks, on-premise resolvers, and split-horizon configurations.
 
 ### Gateway network policies
 
@@ -88,40 +82,7 @@ Geared towards a site-to-site mesh for which we need subnet-level advertisement,
 - **Ansible** is the right tool for "SSH to the connector host, install the package, write the config, enable the systemd unit." It is wrong for managing cloud resources.
 - The bridge is the Terraform state file, read via the `cloud.terraform.terraform_provider` inventory plugin. No intermediate inventory file, no sync job, no drift.
 
-### Why DNS-based service routing
-
-- **Stable.** Service names don't change when a connector host is replaced or an IP shifts inside the subnet.
-- **Discoverable.** The convention `<site-name>.<suffix>` is grep-able, obvious, and mirrors the Terraform site names exactly.
-- **Private.** Hostname routes only resolve over WARP+Gateway. The same name on a non-WARP device returns `NXDOMAIN`. No accidental leakage.
-- **Tunnel-bound, not host-bound.** A hostname route points at a mesh node tunnel, not an IP. The tunnel covers the whole subnet, so the name reaches anything on the site LAN.
-
-### Per-environment DNS suffixes
-
-`dev` uses `dev.prometejs.network`; `prod` uses `prometejs.network`. Allows fully isolated private namespaces on the same Cloudflare account.
-
-## Request flow
-
-Two canonical flows matter: **site → site** and **DNS resolution**. 
-
-### DNS resolution
-
-```mermaid
-sequenceDiagram
-    participant C as Client<br/>(WARP-enrolled)
-    participant W as WARP Client<br/>(local)
-    participant G as Cloudflare Gateway<br/>DNS resolver
-    participant ZT as Zero Trust<br/>hostname routes
-    C->>W: dig site-b.prometejs.network
-    W->>G: DoH query (forced by profile)
-    G->>ZT: lookup hostname route
-    ZT-->>G: tunnel_id for site-b
-    G-->>W: answer (CGNAT IP bound to tunnel)
-    W-->>C: DNS response
-```
-
-**NB**: the answer IP is a Cloudflare-managed CGNAT address. It has no meaning outside the WARP tunnel. A non-WARP device asking a public resolver for the same name gets `NXDOMAIN`.
-
-### Site → site 
+## Site → site flow
 
 ```mermaid
 sequenceDiagram
@@ -131,7 +92,7 @@ sequenceDiagram
     participant GW as Gateway network policy
     participant TB as Mesh Node B
     participant HB as Host on site B
-    HA->>TA: packet to site-b.prometejs.network<br/>(DNS already resolved)
+    HA->>TA: packet to site-b.prometejs.network<br/>
     TA->>CFE: tunnel out
     CFE->>GW: packet inspected
     GW->>GW: match allow_inter_site_traffic

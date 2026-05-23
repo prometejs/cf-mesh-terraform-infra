@@ -32,7 +32,6 @@ graph LR
 #### Features
 
 - **Private networking via Cloudflare**: no public IPs, VPN concentrators, or hub-site hairpinning
-- **DNS-based service discovery**: `site-a.<suffix>` resolves only for WARP-enrolled devices; traffic routes to the site's mesh node automatically
 - **Terraform-managed**: all Cloudflare resources declarative, planned on PRs, applied via workflow dispatch
 - **State-sourced Ansible inventory**: single source of truth between Terraform and Ansible via an _Ansible inventory contract_
 - **CI guardrails**

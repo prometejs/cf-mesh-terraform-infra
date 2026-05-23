@@ -29,8 +29,3 @@ output "site_name" {
   value       = var.name
   description = "Site name identifier"
 }
-
-output "private_hostname" {
-  value       = cloudflare_zero_trust_network_hostname_route.site_hostname.hostname
-  description = "Private FQDN for this site, resolvable only via WARP+Gateway"
-}
