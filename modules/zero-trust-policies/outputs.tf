@@ -1,6 +1,6 @@
-output "inter_site_policy_id" {
-  value       = cloudflare_zero_trust_gateway_policy.allow_inter_site.id
-  description = "Gateway policy ID for inter-site traffic"
+output "inter_site_policy_ids" {
+  value       = { for k, p in cloudflare_zero_trust_gateway_policy.allow_inter_site : k => p.id }
+  description = "Gateway policy IDs for inter-site traffic, keyed by destination site name"
 }
 
 output "warp_to_sites_policy_id" {
@@ -10,5 +10,5 @@ output "warp_to_sites_policy_id" {
 
 output "connector_profile_id" {
   value       = cloudflare_zero_trust_device_custom_profile.warp_connectors.id
-  description = "Device profile ID for WARP Connectors"
+  description = "Device profile ID for Cloudflare Mesh nodes"
 }

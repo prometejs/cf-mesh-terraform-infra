@@ -1,5 +1,5 @@
 resource "cloudflare_zero_trust_tunnel_cloudflared_route" "routes" {
-  for_each = var.tunnel_routes
+  for_each = { for i, r in var.routes : tostring(i) => r }
 
   account_id = var.account_id
   tunnel_id  = each.value.tunnel_id

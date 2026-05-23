@@ -8,12 +8,12 @@ variable "environment" {
   description = "Environment name (dev, test, prod)"
 }
 
-variable "tunnel_routes" {
-  type = map(object({
+variable "routes" {
+  type = list(object({
     tunnel_id = string
     network   = string
     comment   = optional(string, "")
   }))
-  default     = {}
-  description = "Map of route names to tunnel route configurations"
+  default     = []
+  description = "List of tunnel route configurations"
 }

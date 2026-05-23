@@ -5,28 +5,26 @@ resource "random_password" "tunnel_secret" {
 
 resource "cloudflare_zero_trust_tunnel_warp_connector" "connector" {
   account_id    = var.account_id
-  name          = "${var.environment}-${var.site_name}"
+  name          = "${var.environment}-${var.name}"
   tunnel_secret = base64encode(random_password.tunnel_secret.result)
 }
 
-# Teamnet route: send this site's CIDR into the tunnel.
-# The cloudflared_route resource is tunnel-type-agnostic at the teamnet API.
+# Teamnet route: send this site's CIDR into the mesh node tunnel
 resource "cloudflare_zero_trust_tunnel_cloudflared_route" "site_cidr" {
   account_id = var.account_id
   tunnel_id  = cloudflare_zero_trust_tunnel_warp_connector.connector.id
-  network    = var.site_cidr
-  comment    = "${var.site_name} site CIDR (${var.environment})"
+  network    = var.cidr
+  comment    = "${var.name} site CIDR (${var.environment})"
 
   lifecycle {
     create_before_destroy = true
   }
 }
 
-# Private DNS: bind <site>.<suffix> to this tunnel so WARP+Gateway users
-# resolve the name privately and traffic lands in the site's subnet.
+# Private DNS: bind <site>.<suffix> to this mesh node tunnel for private resolution
 resource "cloudflare_zero_trust_network_hostname_route" "site_hostname" {
   account_id = var.account_id
   tunnel_id  = cloudflare_zero_trust_tunnel_warp_connector.connector.id
-  hostname   = "${var.site_name}.${var.private_dns_suffix}"
-  comment    = "${var.site_name} private DNS (${var.environment})"
+  hostname   = "${var.name}.${var.dns_suffix}"
+  comment    = "${var.name} private DNS (${var.environment})"
 }

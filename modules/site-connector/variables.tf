@@ -1,16 +1,16 @@
-variable "site_name" {
+variable "name" {
   type        = string
   description = "Unique name for this site"
 }
 
-variable "site_cidr" {
+variable "cidr" {
   type        = string
   description = "CIDR block for the site's local network"
 }
 
 variable "connector_ip" {
   type        = string
-  description = "IP address of the WARP Connector host on the site network"
+  description = "IP address of the Cloudflare Mesh node host on the site network"
 }
 
 variable "account_id" {
@@ -23,7 +23,7 @@ variable "environment" {
   description = "Environment name (dev, test, prod)"
 }
 
-variable "private_dns_suffix" {
+variable "dns_suffix" {
   type        = string
   description = "Private DNS suffix for the site hostname (e.g. dev.prometejs.network). Resolvable only over WARP+Gateway."
 }

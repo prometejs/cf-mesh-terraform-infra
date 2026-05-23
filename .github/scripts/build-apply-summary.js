@@ -9,7 +9,6 @@
 //   PLAN_RESULT  - needs.plan.result  (success/failure/skipped/cancelled)
 //   APPLY_RESULT - needs.apply.result
 //   NEW_SITES    - space-separated list of sites the plan reported as new
-//                  (empty when no new sites were planned this run)
 
 module.exports = async ({ core, context }) => {
   const { WORKSPACE, PLAN_RESULT, APPLY_RESULT, NEW_SITES } = process.env;
@@ -46,7 +45,7 @@ module.exports = async ({ core, context }) => {
       .addRaw('\n\n> [!IMPORTANT]\n', false)
       .addRaw(`> **New sites created this run:** ${list}\n`, false)
       .addRaw(
-        "> If these haven't been onboarded yet, run `site-onboard.yml` against them to install the WARP connector and bring the connectors online.\n",
+        "> If these haven't been onboarded yet, run `site-onboard.yml` against them to install the Cloudflare Mesh node and bring it online.\n",
         false,
       );
     core.warning(

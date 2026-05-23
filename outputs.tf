@@ -37,3 +37,8 @@ output "environment" {
   value       = terraform.workspace
   description = "Current Terraform workspace / environment"
 }
+
+output "extra_route_ids" {
+  value       = module.extra_routes.route_ids
+  description = "Map of extra teamnet route names to their Cloudflare route IDs"
+}
