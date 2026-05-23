@@ -89,12 +89,12 @@ sites = {
 routes = [
   {
     tunnel_id = "123e4567-e89b-12d3-a456-426614174011"
-    network = "10.30.20.0/24"
-    comment = "Secondary VLAN behind dev-site-a"
+    network   = "10.30.20.0/24"
+    comment   = "Secondary VLAN behind dev-site-a"
   },
   {
     tunnel_id = "123e4567-e89b-12d3-a456-426614174000"
-    network = "10.40.0.0/22"
-    comment = "IoT subnet reachable via the London edge mesh node (dev-site-edge-lon)"
+    network   = "10.40.0.0/22"
+    comment   = "IoT subnet reachable via the London edge mesh node (dev-site-edge-lon)"
   },
 ]
