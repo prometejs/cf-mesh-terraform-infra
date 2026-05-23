@@ -18,6 +18,8 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: write   # for the called plan.yml
+  actions: read          # for actions/download-artifact@v8
 
 env:
   PLAN_FILE: tf-plan-${{ inputs.workspace }}-${{ github.sha }}.binary
