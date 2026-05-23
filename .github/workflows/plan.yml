@@ -59,7 +59,7 @@ jobs:
           path: .
           label: tf-plan-${{ env.WORKSPACE }}
           workspace: ${{ env.WORKSPACE }}
-          var_file: environments/${{ env.WORKSPACE }}.tfvars
+          var_file: fixtures/${{ env.WORKSPACE }}.tfvars
           backend_config_file: environments/${{ env.WORKSPACE }}.s3.tfbackend
           add_github_comment: "${{ github.event_name == 'pull_request' }}"
 
