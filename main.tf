@@ -74,7 +74,6 @@ resource "ansible_host" "site" {
     ansible_host     = each.value.connector_ip
     tunnel_token     = module.nodes[each.key].tunnel_token
     site_cidr        = each.value.cidr
-    private_hostname = module.nodes[each.key].private_hostname
     ha_enabled       = tostring(each.value.ha_enabled)
     ha_peer_ip       = each.value.ha_peer_ip
     environment      = terraform.workspace
