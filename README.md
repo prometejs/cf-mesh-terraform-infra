@@ -39,49 +39,37 @@ graph LR
 
 see [notes](./NOTES.md) for more info.
 
-## Setup Requirements
+## Setup Guide
 
 ### Tooling
 
-| Tool | Version |
-|---|---|
-| Terraform | `>= 1.8.0` |
-| Cloudflare provider | `~> 5.17` (tested on 5.18.0) |
-| Ansible provider (`ansible/ansible`) | `~> 1.3` |
-| Random provider | `~> 3.6` |
-| Ansible core | `>= 2.15` |
-| Ansible collection | `cloud.terraform` (for the `terraform_provider` inventory plugin) |
+| Tool | Required version |
+|:---|:---|
+| Terraform | >= 1.8.0 |
+| Cloudflare provider	| ~> 5.17 (locked at 5.18.0) | 
+| Ansible provider | 	~> 1.3 (locked at 1.4.0) |
+| hashicorp/random provider	| ~> 3.6 (locked at 3.8.1) |
+| hashicorp/null provider	| ~> 3.2 (locked at 3.2.4) |
+| tflint	| latest (with terraform plugin, recommended preset, call_module_type = "local") |
+| AWS CLI / credentials	| n/a — only static keys used	|
 
 ### Accounts
 
 - **Cloudflare**: Zero Trust enabled. API token scoped to: `Account:Cloudflare Tunnel:Edit`, `Account:Zero Trust:Edit`, `Account:Access:Apps and Policies:Edit`, `Zone:DNS:Edit`
 - **AWS**: S3 bucket + DynamoDB table for Terraform state (S3 backend with DynamoDB locking)
 
-### Environment configuration
+### Environment configuration (Per Environment)
 
-Create `dev` and `prod` environments in repo Settings → Environments, then set the following at the **environment** level:
+| Name | Sensitive | Used for |
+|:---|:---|:---|
+| `CLOUDFLARE_API_TOKEN` | true | cloudflare provider token. Token must allow Zero Trust tunnels, gateway policies, device profiles, virtual networks, and tunnel routes on the target account. |
+| `AWS_ACCESS_KEY_ID` | true  | Auth for the S3 backend |
+| `AWS_SECRET_ACCESS_KEY` | true | Auth for the S3 backend |
+| `CLOUDFLARE_ACCOUNT_ID` | false | Becomes TF_VAR_cloudflare_account_id |
+| `CLOUDFLARE_ZONE_ID` | false | Becomes TF_VAR_cloudflare_zone_id (reserved for dns module only)|
 
-| Variable | Terraform Side |
-|---|---|
-| `CLOUDFLARE_API_TOKEN` | `CLOUDFLARE_API_TOKEN` → `TF_VAR_cloudflare_api_token` |
-| `CLOUDFLARE_ACCOUNT_ID` | `CLOUDFLARE_ACCOUNT_ID` → `TF_VAR_cloudflare_account_id` |
-| `CLOUDFLARE_ZONE_ID` | `CLOUDFLARE_ZONE_ID` → `TF_VAR_cloudflare_zone_id` |
-| `AWS_ACCESS_KEY_ID` | |
-| `AWS_SECRET_ACCESS_KEY` | |
-
-### Usage Example
-Local plan (read-only, dev)
-```
-export CLOUDFLARE_API_TOKEN=...
-export AWS_ACCESS_KEY_ID=...
-export AWS_SECRET_ACCESS_KEY=...
-export TF_VAR_cloudflare_account_id=...
-export TF_VAR_cloudflare_zone_id=...
-
-terraform init
-terraform workspace select -or-create=true dev
-terraform plan -var-file=environments/dev.tfvars
-```
+###  Backend setup
+terraform.tf declares an empty backend "s3" {}, which is filled in by per-environment files in environments/.
 
 ### Testing
 
