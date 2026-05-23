@@ -35,7 +35,7 @@ graph LR
 - **DNS-based service discovery**: `site-a.<suffix>` resolves only for WARP-enrolled devices; traffic routes to the site's mesh node automatically
 - **Terraform-managed**: all Cloudflare resources declarative, planned on PRs, applied via workflow dispatch
 - **State-sourced Ansible inventory**: single source of truth between Terraform and Ansible via an _Ansible inventory contract_
-- **CI/CD guardrails**
+- **CI guardrails**
 
 see [notes](./NOTES.md) for more info.
 
