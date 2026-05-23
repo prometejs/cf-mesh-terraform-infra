@@ -27,3 +27,8 @@ variable "dns_suffix" {
   type        = string
   description = "Private DNS suffix for the site hostname (e.g. dev.prometejs.network). Resolvable only over WARP+Gateway."
 }
+
+variable "virtual_network_id" {
+  type        = string
+  description = "Cloudflare Virtual Network ID. The site's CIDR route is pinned to this VNet for logical routing table separation."
+}

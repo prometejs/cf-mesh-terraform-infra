@@ -2,11 +2,12 @@ A Cloudflare Zero Trust any-to-any mesh network built on **Cloudflare Mesh** (fo
 
 A **mesh node** runs at each physical or virtual site and advertises its local IPv4/IPv6 subnets to the Cloudflare global network, creating secure, bidirectional site-to-site and client-to-site connectivity via private IP routing.
 
-Three things make the mesh work:
+Four things make the mesh work:
 
-1. **Mesh node tunnels** on each site terminate into Cloudflare's edge.
-2. **Teamnet routes** tell Cloudflare "CIDR X belongs on tunnel Y."
-3. **Private DNS hostname routes** bind a FQDN to a tunnel, resolvable only through Cloudflare Gateway.
+1. **A Virtual Network per workspace** scopes every CIDR route below to a single environment's routing namespace.
+2. **Mesh node tunnels** on each site terminate into Cloudflare's edge.
+3. **Teamnet routes** tell Cloudflare "CIDR X belongs on tunnel Y" (inside this workspace's VNet).
+4. **Private DNS hostname routes** bind a FQDN to a tunnel, resolvable only through Cloudflare Gateway. Hostname routes are tunnel-scoped — they inherit VNet isolation from the CIDR routes underneath.
   
 ## Components
 
@@ -16,6 +17,12 @@ Three things make the mesh work:
 - **Does:** Hosts the mesh node registry, teamnet route table, Gateway DNS resolver, Gateway network policies, device profiles.
 - **Why:** Replaces the traditional VPN concentrator. Every site connects outbound to Cloudflare's edge; limited to none public attack surface on the sites themselves.
 
+### Virtual Network (per workspace)
+
+- **What:** A `cloudflare_zero_trust_tunnel_cloudflared_virtual_network` resource created once per Terraform workspace by `modules/virtual-network`.
+- **Does:** Provides a logical routing namespace inside the Zero Trust account. Every teamnet route and every private DNS hostname route in this workspace is pinned to its VNet via `virtual_network_id`.
+- **Why:** Two VNets on the same account may advertise overlapping CIDRs without conflict; so `dev` and `prod` can use the same `10.20.0.0/24` blocks without colliding. It also makes per-environment cleanup trivial: deleting a workspace tears down its VNet and orphans nothing into the account default.
+
 ### Cloudflare Mesh node (per site)
 
 - **What:** A Cloudflare-provided binary (`cloudflare-warp` running in mesh-node mode, formerly "WARP Connector" mode) installed on a host inside the site's subnet.
@@ -24,9 +31,9 @@ Three things make the mesh work:
 
 ### Teamnet routes (CIDR advertisement)
 
-- **What:** Entries in Cloudflare's internal routing table that map a CIDR to a tunnel UUID.
-- **Does:** Tell Cloudflare Gateway, "packets destined for `10.10.0.0/24` should be sent into tunnel `<uuid>`."
-- **Why:** Without these, Cloudflare knows the tunnel exists but has no idea which subnet lives behind it.
+- **What:** Entries in Cloudflare's internal routing table that map a CIDR to a tunnel UUID, scoped to a Virtual Network.
+- **Does:** Tell Cloudflare Gateway, "packets destined for `10.10.0.0/24` inside VNet `<vnet-id>` should be sent into tunnel `<uuid>`."
+- **Why:** Without these, Cloudflare knows the tunnel exists but has no idea which subnet lives behind it. Scoping to a VNet means dev and prod can advertise the same CIDR through different tunnels without collision.
 
 ### Private DNS (hostname routes)
 

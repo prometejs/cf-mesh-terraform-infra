@@ -1,4 +1,15 @@
 # --------------------------------------------------------------------------
+# Virtual Network (per workspace / environment)
+# --------------------------------------------------------------------------
+
+module "vnet" {
+  source = "./modules/virtual-network"
+
+  account_id  = var.cloudflare_account_id
+  environment = terraform.workspace
+}
+
+# --------------------------------------------------------------------------
 # Site Mesh Node + Default Routes
 # --------------------------------------------------------------------------
 
@@ -6,12 +17,13 @@ module "nodes" {
   source   = "./modules/site-connector"
   for_each = var.sites
 
-  name         = each.key
-  cidr         = each.value.cidr
-  connector_ip = each.value.connector_ip
-  account_id   = var.cloudflare_account_id
-  environment  = terraform.workspace
-  dns_suffix   = var.private_dns_suffix
+  name               = each.key
+  cidr               = each.value.cidr
+  connector_ip       = each.value.connector_ip
+  account_id         = var.cloudflare_account_id
+  environment        = terraform.workspace
+  dns_suffix         = var.private_dns_suffix
+  virtual_network_id = module.vnet.id
 }
 
 # --------------------------------------------------------------------------
@@ -33,9 +45,10 @@ module "zero_trust_policies" {
 module "routes" {
   source = "./modules/network-routes"
 
-  account_id  = var.cloudflare_account_id
-  environment = terraform.workspace
-  routes      = var.routes
+  account_id         = var.cloudflare_account_id
+  environment        = terraform.workspace
+  routes             = var.routes
+  virtual_network_id = module.vnet.id
 }
 
 # --------------------------------------------------------------------------

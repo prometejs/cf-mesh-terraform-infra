@@ -17,3 +17,8 @@ variable "routes" {
   default     = []
   description = "List of tunnel route configurations"
 }
+
+variable "virtual_network_id" {
+  type        = string
+  description = "Cloudflare Virtual Network ID. Every extra route emitted by this module is pinned to it so it shares the workspace's routing namespace."
+}
