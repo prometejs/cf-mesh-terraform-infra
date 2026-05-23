@@ -5,10 +5,6 @@
 Terraform-managed dedicated **Cloudflare Mesh** network. **Cloudflare side** of a site-to-site provisioning stack.
 
 ```mermaid
----
-config:
-  themeCSS: ".node a { text-decoration: none; } .node a:hover { text-decoration: underline; }"
----
 graph LR
     %% Style definitions
     classDef default fill:transparent,stroke:#333,stroke-width:1px;
@@ -21,13 +17,13 @@ graph LR
     A["cf-mesh-site-config<br/><hr/>day-2 config"]:::linkNode
     N["cf-mesh-node-agent<br/><hr/>metrics+logs collector"]:::linkNode
 
-    %% Flow connections
+    %% Flow connections with text notes
     T --> C
     T --> A
     C --> A
     N --> C
 
-    %% Clickable hyperlinks
+    %% Clickable hyperlinks (Fixed with 'href')
     click C href "https://github.com/prometejs/cf-mesh-cloud-init" "Open Cloud-Init Repo"
     click A href "https://github.com/prometejs/cf-mesh-site-config" "Open Ansible Repo"
     click N href "https://github.com/prometejs/cf-mesh-node-agent" "Node Agent Repo"
