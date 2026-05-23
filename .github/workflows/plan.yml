@@ -38,8 +38,13 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
+  checks:
+    name: Static Checks
+    uses: ./.github/workflows/checks.yml
+
   plan:
     name: Plan (${{ inputs.workspace || 'dev' }})
+    needs: checks
     runs-on: ubuntu-latest
     environment: ${{ inputs.workspace || 'dev' }}
 
