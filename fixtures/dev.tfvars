@@ -1,5 +1,3 @@
-private_dns_suffix = "dev.prometejs.network"
-
 # Eight-site dev mesh.
 #
 # Under the current schema, each site's `peers` list is the set of source
