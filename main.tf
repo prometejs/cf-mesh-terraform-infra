@@ -79,5 +79,9 @@ resource "ansible_host" "site" {
     remote_cidrs = jsonencode([
       for k, v in var.sites : v.cidr if k != each.key
     ])
+    metadata = jsonencode({
+      mac = each.value.mac
+      location = each.value.location
+    })
   }
 }

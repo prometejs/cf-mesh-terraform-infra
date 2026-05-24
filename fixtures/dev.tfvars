@@ -27,26 +27,36 @@ sites = {
   "dev-site-a" = {
     cidr         = "10.20.0.0/24"
     connector_ip = "10.20.0.1"
+    mac     = "aa:bb:cc:00:00:0a"
+    location     = "us-west-1"
   }
   "dev-site-b" = {
     cidr         = "10.20.1.0/24"
     connector_ip = "10.20.1.1"
+    mac     = "aa:bb:cc:00:00:0b"
+    location     = "us-west-1"
   }
   "dev-site-c" = {
     cidr         = "10.20.2.0/24"
     connector_ip = "10.20.2.1"
     ha_enabled   = true
     ha_peer_ip   = "10.20.2.2"
+    mac     = "aa:bb:cc:00:00:0c"
+    location     = "us-east-1"
   }
   "dev-site-edge-lon" = {
     cidr         = "10.20.3.0/24"
     connector_ip = "10.20.3.1"
     ha_enabled   = true
     ha_peer_ip   = "10.20.3.2"
+    mac     = "aa:bb:cc:00:00:0d"
+    location     = "eu-west-2"
   }
   "dev-site-edge-fra" = {
     cidr         = "10.20.4.0/24"
     connector_ip = "10.20.4.1"
+    mac     = "aa:bb:cc:00:00:0e"
+    location     = "eu-central-1"
     peers = [
       "10.20.0.0/24", # dev-site-a
       "10.20.1.0/24", # dev-site-b
@@ -57,6 +67,8 @@ sites = {
   "dev-site-lab" = {
     cidr         = "10.20.5.0/24"
     connector_ip = "10.20.5.1"
+    mac     = "aa:bb:cc:00:00:0f"
+    location     = "us-west-1"
     peers = [
       "10.20.0.0/24", # dev-site-a
       "10.20.1.0/24", # dev-site-b
@@ -66,6 +78,8 @@ sites = {
   "dev-site-quarantine" = {
     cidr         = "10.20.6.0/24"
     connector_ip = "10.20.6.1"
+    mac     = "aa:bb:cc:00:00:10"
+    location     = "us-east-1"
     peers = [
       "10.20.0.0/24", # dev-site-a
     ]
@@ -75,6 +89,8 @@ sites = {
     connector_ip = "10.20.7.1"
     ha_enabled   = true
     ha_peer_ip   = "10.20.7.2"
+    mac     = "aa:bb:cc:00:00:11"
+    location     = "us-west-2"
     peers = [
       "10.20.0.0/24", # dev-site-a
       "10.20.1.0/24", # dev-site-b
