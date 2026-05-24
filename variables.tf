@@ -7,7 +7,7 @@ variable "sites" {
   type = map(object({
     cidr         = string
     connector_ip = string
-    mac     = string 
+    mac          = string
     ha_enabled   = optional(bool, false)
     ha_peer_ip   = optional(string, "")
     peers        = optional(list(string), null)
@@ -31,7 +31,7 @@ variable "sites" {
   }
 
   validation {
-    condition = alltrue([ for s in values(var.sites) : s.node_mac == "" || can(regex("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", s.node_mac)) ])
+    condition     = alltrue([for s in values(var.sites) : s.node_mac == "" || can(regex("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", s.node_mac))])
     error_message = "node_mac must be a valid MAC address (xx:xx:xx:xx:xx:xx or xx-xx-xx-xx-xx-xx) or empty"
   }
 }

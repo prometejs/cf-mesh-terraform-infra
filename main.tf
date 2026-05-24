@@ -80,7 +80,7 @@ resource "ansible_host" "site" {
       for k, v in var.sites : v.cidr if k != each.key
     ])
     metadata = jsonencode({
-      mac = each.value.mac
+      mac      = each.value.mac
       location = each.value.location
     })
   }
