@@ -10,6 +10,7 @@ output "site_inventory" {
       cidr         = site.site_cidr
       connector_ip = site.connector_ip
       environment  = terraform.workspace
+      tags         = site.tags
     }
   }
   sensitive   = true
