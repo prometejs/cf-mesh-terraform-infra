@@ -31,8 +31,8 @@ variable "sites" {
   }
 
   validation {
-    condition     = alltrue([for s in values(var.sites) : s.node_mac == "" || can(regex("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", s.node_mac))])
-    error_message = "node_mac must be a valid MAC address (xx:xx:xx:xx:xx:xx or xx-xx-xx-xx-xx-xx) or empty"
+    condition     = alltrue([for s in values(var.sites) : s.mac == "" || can(regex("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", s.mac))])
+    error_message = "mac must be a valid MAC address (xx:xx:xx:xx:xx:xx or xx-xx-xx-xx-xx-xx) or empty"
   }
 }
 
