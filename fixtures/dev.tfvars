@@ -27,12 +27,14 @@ sites = {
     connector_ip = "10.20.0.1"
     mac          = "aa:bb:cc:00:00:0a"
     location     = "us-west-1"
+    ci_runner    = true # set as dedicated ci runner target in .github/workflows/apply.yml
   }
   "dev-site-b" = {
     cidr         = "10.20.1.0/24"
     connector_ip = "10.20.1.1"
     mac          = "aa:bb:cc:00:00:0b"
     location     = "us-west-1"
+    ci_runner    = false
   }
   "dev-site-c" = {
     cidr         = "10.20.2.0/24"
@@ -41,6 +43,7 @@ sites = {
     ha_peer_ip   = "10.20.2.2"
     mac          = "aa:bb:cc:00:00:0c"
     location     = "us-east-1"
+    ci_runner    = false
   }
   "dev-site-edge-lon" = {
     cidr         = "10.20.3.0/24"
@@ -49,12 +52,14 @@ sites = {
     ha_peer_ip   = "10.20.3.2"
     mac          = "aa:bb:cc:00:00:0d"
     location     = "eu-west-2"
+    ci_runner    = false
   }
   "dev-site-edge-fra" = {
     cidr         = "10.20.4.0/24"
     connector_ip = "10.20.4.1"
     mac          = "aa:bb:cc:00:00:0e"
     location     = "eu-central-1"
+    ci_runner    = false
     peers = [
       "10.20.0.0/24", # dev-site-a
       "10.20.1.0/24", # dev-site-b
@@ -67,6 +72,7 @@ sites = {
     connector_ip = "10.20.5.1"
     mac          = "aa:bb:cc:00:00:0f"
     location     = "us-west-1"
+    ci_runner    = false
     peers = [
       "10.20.0.0/24", # dev-site-a
       "10.20.1.0/24", # dev-site-b
@@ -78,6 +84,7 @@ sites = {
     connector_ip = "10.20.6.1"
     mac          = "aa:bb:cc:00:00:10"
     location     = "us-east-1"
+    ci_runner    = false
     peers = [
       "10.20.0.0/24", # dev-site-a
     ]
@@ -89,6 +96,7 @@ sites = {
     ha_peer_ip   = "10.20.7.2"
     mac          = "aa:bb:cc:00:00:11"
     location     = "us-west-2"
+    ci_runner    = false
     peers = [
       "10.20.0.0/24", # dev-site-a
       "10.20.1.0/24", # dev-site-b

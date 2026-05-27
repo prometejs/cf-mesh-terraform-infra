@@ -6,7 +6,6 @@ output "site_inventory" {
   value = {
     for name, site in module.nodes : name => {
       tunnel_id    = site.tunnel_id
-      tunnel_token = site.tunnel_token
       cidr         = site.site_cidr
       connector_ip = site.connector_ip
       environment  = terraform.workspace
@@ -16,7 +15,6 @@ output "site_inventory" {
       }
     }
   }
-  sensitive   = true
   description = "Structured site inventory for Ansible consumption"
   # ( SSH target, `ha_enabled`, `ha_peer_ip`, `remote_cidrs` can be added here as needed )
 }

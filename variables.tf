@@ -12,6 +12,7 @@ variable "sites" {
     ha_peer_ip   = optional(string, "")
     peers        = optional(list(string), null)
     location     = optional(string, "")
+    ci_runner    = optional(bool, false)
   }))
   description = <<EOT
     Map of site definitions keyed by site name.

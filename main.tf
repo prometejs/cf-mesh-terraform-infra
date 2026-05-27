@@ -76,6 +76,7 @@ resource "ansible_host" "site" {
     ha_enabled   = tostring(each.value.ha_enabled)
     ha_peer_ip   = each.value.ha_peer_ip
     environment  = terraform.workspace
+    ci_runner    = tostring(each.value.ci_runner)
     remote_cidrs = jsonencode([
       for k, v in var.sites : v.cidr if k != each.key
     ])
