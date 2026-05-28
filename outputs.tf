@@ -9,12 +9,14 @@ output "site_inventory" {
       cidr         = site.site_cidr
       connector_ip = site.connector_ip
       environment  = terraform.workspace
+      tunnel_token = site.tunnel_token # used in cloud-init for tunnel authentication
       tags = {
         mac      = var.sites[name].mac
         location = var.sites[name].location
       }
     }
   }
+  sensitive   = true
   description = "Structured site inventory for Ansible consumption"
   # ( SSH target, `ha_enabled`, `ha_peer_ip`, `remote_cidrs` can be added here as needed )
 }
